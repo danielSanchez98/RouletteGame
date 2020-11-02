@@ -1,6 +1,8 @@
 package com.roulette.persistence.entity;
 
-public class RouletteBets {
+import java.io.Serializable;
+
+public class RouletteBets implements Serializable {
 	private String idUsuario;
 	private Integer ammount;
 	private Integer numberBetted;

@@ -1,12 +1,18 @@
 package com.roulette.persistence.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Roulette {	
+public class Roulette implements Serializable {	
 	private String id;
-	private Boolean isAvailable;
+	private String isAvailable;
 	private Integer winnerNumber;
 	private List<RouletteBets> rouletteBets;
+	
+	public Roulette(String id, String isAvailable) {
+		this.id = id;
+		this.isAvailable = isAvailable;
+	}
 	public String getId() {
 		
 		return id;
@@ -15,11 +21,11 @@ public class Roulette {
 		
 		this.id = id;
 	}
-	public Boolean getIsAvailable() {
+	public String getIsAvailable() {
 		
 		return isAvailable;
 	}
-	public void setIsAvailable(Boolean isAvailable) {
+	public void setIsAvailable(String isAvailable) {
 		
 		this.isAvailable = isAvailable;
 	}
