@@ -8,5 +8,6 @@ public interface RouletteCrudRepository {
 	List<Roulette> findAll();
 	Roulette findById(String idRoulette);
 	Roulette save(Roulette roulette);
+	Roulette update(Roulette roulette);
 	
 }

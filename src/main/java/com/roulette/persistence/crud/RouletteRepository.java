@@ -30,5 +30,10 @@ public class RouletteRepository implements RouletteCrudRepository  {
 		hashOperations.put(KEY, roulette.getId(), roulette);
 		
 		return roulette;		
+	}
+	@Override
+	public Roulette update(Roulette roulette) {
+		
+		return save(roulette);
 	}	
 }
