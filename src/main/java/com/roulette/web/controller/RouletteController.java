@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.roulette.persistence.crud.RouletteRepository;
 import com.roulette.persistence.entity.Roulette;
 import com.roulette.persistence.entity.RouletteBets;
+import com.roulette.persistence.entity.WinnerResult;
 
 @RestController
 @RequestMapping("/api")
@@ -128,6 +129,51 @@ public class RouletteController {
 			return message;			
 		} catch (Exception e) {
 			return "error:"+e.toString();
+		}
+	}
+	
+	@PostMapping("/roulette/close/{idRoulette}")
+	public List<WinnerResult> closeRouletteAndgetWinners(@PathVariable String idRoulette){
+		List<WinnerResult> winnersList = new ArrayList<>();
+		int winnerNumber = (int)(Math.random()*36);
+		String winnerColor = (winnerNumber % 2 == 0) ?"rojo":"negro";
+		try {
+			Roulette roulette = rouletteRepository.findById(idRoulette);
+			if(roulette == null) {
+				
+				return winnersList;
+			}
+			roulette.setIsAvailable("closed");
+			rouletteRepository.update(roulette);			
+			List<RouletteBets> betsCreated = roulette.getRouletteBets();			
+			WinnerResult winnerResult = new WinnerResult();
+			for (int i = 0; i < betsCreated.size(); i++) {
+				if(betsCreated.get(i).getNumberBetted() == winnerNumber || betsCreated.get(i).getColorBetted().equals(winnerColor) ) {
+					if(betsCreated.get(i).getTypeOfBet().equals("numero")) {
+						winnerResult.setIdUsuario(betsCreated.get(i).getIdUsuario());
+						winnerResult.setBetAmmount(betsCreated.get(i).getAmmount());
+						winnerResult.setBetOption(betsCreated.get(i).getNumberBetted().toString());
+						winnerResult.setTypeOfBet("numero");
+						winnerResult.setWinnerNumber(winnerNumber);
+						winnerResult.setAmmountWon(betsCreated.get(i).getAmmount()*5.0);
+					}else {
+						winnerResult.setIdUsuario(betsCreated.get(i).getIdUsuario());
+						winnerResult.setBetAmmount(betsCreated.get(i).getAmmount());
+						winnerResult.setBetOption(betsCreated.get(i).getColorBetted());
+						winnerResult.setTypeOfBet("color");
+						winnerResult.setWinnerNumber(winnerNumber);
+						winnerResult.setAmmountWon(betsCreated.get(i).getAmmount()*1.8);						
+					}
+					winnersList.add(winnerResult);
+					winnerResult = new WinnerResult(); 					
+				}
+			}
+			
+			return winnersList;
+			
+		} catch (Exception e) {
+			
+			return winnersList;
 		}
 	}
 }
