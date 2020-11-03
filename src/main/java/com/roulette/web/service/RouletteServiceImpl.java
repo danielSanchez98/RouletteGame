@@ -64,7 +64,7 @@ public class RouletteServiceImpl implements RouletteService {
 	public String setColorToBet(Roulette roulette,RouletteBets rouletteBet, RouletteRepository rouletteRepository) {
 		String message = "";
 		String colorBet = rouletteBet.getColorBetted();
-		if((!colorBet.equals("negro") && !colorBet.equals("rojo"))) {
+		if((!colorBet.equals("black") && !colorBet.equals("red"))) {
 			message = "This color is not an option.";
 		}else {
 			roulette.getRouletteBets().add(rouletteBet);
@@ -78,11 +78,11 @@ public class RouletteServiceImpl implements RouletteService {
 
 	@Override
 	public WinnerResult setWinnerResultByNumberAndColor(WinnerResult winnerResult, List<RouletteBets> betsCreated, int currentBet) {		
-		if(betsCreated.get(currentBet).getTypeOfBet().equals("numero")) {
+		if(betsCreated.get(currentBet).getTypeOfBet().equals("number")) {
 			winnerResult.setIdUsuario(betsCreated.get(currentBet).getIdUsuario());
 			winnerResult.setBetAmmount(betsCreated.get(currentBet).getAmmount());
 			winnerResult.setBetOption(betsCreated.get(currentBet).getNumberBetted().toString());
-			winnerResult.setTypeOfBet("numero");
+			winnerResult.setTypeOfBet("number");
 			winnerResult.setAmmountWon(betsCreated.get(currentBet).getAmmount()*5.0);
 		}else {
 			winnerResult.setIdUsuario(betsCreated.get(currentBet).getIdUsuario());

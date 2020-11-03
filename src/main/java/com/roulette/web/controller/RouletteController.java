@@ -20,7 +20,7 @@ import com.roulette.persistence.entity.WinnerResult;
 import com.roulette.web.service.RouletteServiceImpl;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/roulette")
 public class RouletteController {
 	
 	private RouletteRepository rouletteRepository;
@@ -31,19 +31,20 @@ public class RouletteController {
 		this.rouletteRepository = rouletteRepository;
 	}
 	
-	@PostMapping("/roulette/create")
+	@PostMapping("/create")
 	public String createNewRoulette() {
 		try {
 			Roulette roulette = new Roulette(UUID.randomUUID().toString(),"closed");
 			
 			return rouletteRepository.save(roulette).getId();
 		} catch (Exception e) {
-			return "";
+			
+			return "An error ocurred. Try again.";
 		}
 		
 	}	
 	
-	@GetMapping("/roulette/list")
+	@GetMapping("/list")
 	public List<?> getAllRoulletes(){
 		List roulettesAndStatusList = new ArrayList<>();
 		try {			
@@ -57,7 +58,7 @@ public class RouletteController {
 		}		
 	}
 	
-	@PostMapping("/roulette/open/{idRoulette}")
+	@PostMapping("/open/{idRoulette}")
 	public Boolean openRouletteById(@PathVariable String idRoulette) {
 		try {
 			Roulette roulette = rouletteRepository.findById(idRoulette);
@@ -70,12 +71,11 @@ public class RouletteController {
 			return false;
 					
 		} catch (Exception e) {
-			System.out.println(e);
 			return false;
 		}
 	}
 	
-	@PostMapping("/roulette/bet/{idRoulette}")
+	@PostMapping("/bet/{idRoulette}")
 	public String betAmmountByColorOrNumber(@PathVariable String idRoulette, @RequestHeader("idUser") String idUser, @RequestBody RouletteBets rouletteBetBody) {
 		String message = "";
 		try {
@@ -89,7 +89,7 @@ public class RouletteController {
 				return message;
 			}			
 			switch (rouletteBet.getTypeOfBet()) {
-			case "numero":
+			case "number":
 				message = rouletteService.setNumberToBet(roulette, rouletteBet, rouletteRepository);				
 				break;
 			case "color":
@@ -106,11 +106,11 @@ public class RouletteController {
 		}
 	}
 	
-	@PostMapping("/roulette/close/{idRoulette}")
+	@PostMapping("/close/{idRoulette}")
 	public List<WinnerResult> closeRouletteAndgetWinners(@PathVariable String idRoulette){
 		List<WinnerResult> winnersList = new ArrayList<>();
 		int winnerNumber = (int)(Math.random()*36);
-		String winnerColor = (winnerNumber % 2 == 0) ?"rojo":"negro";
+		String winnerColor = (winnerNumber % 2 == 0) ?"red":"black";
 		try {
 			Roulette roulette = rouletteRepository.findById(idRoulette);
 			if(roulette == null) {
@@ -130,8 +130,7 @@ public class RouletteController {
 				}
 			}
 			
-			return winnersList;
-			
+			return winnersList;			
 		} catch (Exception e) {
 			
 			return winnersList;
