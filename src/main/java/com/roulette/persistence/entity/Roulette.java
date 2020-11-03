@@ -1,6 +1,7 @@
 package com.roulette.persistence.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Roulette implements Serializable {	
@@ -12,6 +13,8 @@ public class Roulette implements Serializable {
 	public Roulette(String id, String isAvailable) {
 		this.id = id;
 		this.isAvailable = isAvailable;
+		this.winnerNumber = -1;
+		this.rouletteBets = new ArrayList<>();
 	}
 	public String getId() {
 		
