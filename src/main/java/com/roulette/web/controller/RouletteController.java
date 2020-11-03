@@ -121,9 +121,9 @@ public class RouletteController {
 			rouletteRepository.update(roulette);			
 			List<RouletteBets> betsCreated = roulette.getRouletteBets();			
 			WinnerResult winnerResult = new WinnerResult();
-			winnerResult.setWinnerNumber(winnerNumber);
 			for (int i = 0; i < betsCreated.size(); i++) {
 				if(betsCreated.get(i).getNumberBetted() == winnerNumber || betsCreated.get(i).getColorBetted().equals(winnerColor) ) {
+					winnerResult.setWinnerNumber(winnerNumber);
 					winnerResult = rouletteService.setWinnerResultByNumberAndColor(winnerResult, betsCreated, i);
 					winnersList.add(winnerResult);
 					winnerResult = new WinnerResult(); 					
